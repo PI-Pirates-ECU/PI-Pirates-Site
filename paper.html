@@ -1,0 +1,1821 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<title>Deploying a Network Management Overlay for Education Video Conferencing Services</title>
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:"Segoe UI Symbol";
+	panose-1:2 11 5 2 4 2 4 2 2 3;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0in;
+	margin-right:35.5pt;
+	margin-bottom:7.35pt;
+	margin-left:36.5pt;
+	text-indent:-.5pt;
+	line-height:104%;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;}
+h1
+	{mso-style-link:"Heading 1 Char";
+	margin-top:0in;
+	margin-right:.9in;
+	margin-bottom:.05pt;
+	margin-left:36.5pt;
+	text-indent:-.5pt;
+	line-height:107%;
+	page-break-after:avoid;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-link:"Heading 1";
+	font-family:"Arial",sans-serif;
+	color:black;
+	font-weight:bold;}
+ /* Page Definitions */
+ @page WordSection1
+	{size:8.5in 11.0in;
+	margin:72.3pt 72.4pt 75.35pt 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+@page WordSection2
+	{size:8.5in 11.0in;
+	margin:1.0in 69.15pt 73.8pt 1.0in;}
+div.WordSection2
+	{page:WordSection2;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US>
+
+<div class=WordSection1>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:.9in;margin-bottom:8.05pt;
+margin-left:36.5pt;line-height:107%'><b>Deploying a Network Management Overlay
+for Education Video Conferencing Services </b></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<h1 style='margin-top:0in;margin-right:0in;margin-bottom:.05pt;margin-left:
+0in;text-indent:0in'>Ciprian Popoviciu, Philip Lunsford, John Pickard, Dale
+Drummond, Colby Sawyer, Jarvis Woodburn, Zachary Zynda </h1>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:35.5pt;margin-bottom:
+8.05pt;margin-left:.5in;text-align:justify;text-justify:inter-ideograph;
+text-indent:0in;line-height:107%'><b>Abstract:  </b>Distance Education (DE) and
+Distance Collaboration (DC) adoption is rapidly growing to increase educational
+and innovation opportunities for a broader segment of the population,
+unencumbered by geographical and socio-economic constraints. The delivery of
+such services is rapidly evolving with the inclusion of new technologies and
+tools facilitating a more engaged, context aware and interactive participation.
+Without the ability to effectively monitor and manage the reliability,
+bandwidth, and latency between endpoints as well as key control plane elements
+such as DNS and call management, the efficacy and acceptance of the technology
+suffers due to poor user experience. Unfortunately, when putting together
+off-the-shelf solutions we are constrained by the operational models expected
+by various vendors involved. To address the specific needs of such services in
+DE and DC, we propose overlaying a network management layer that brings
+together vendor tools and purpose-built tools within the context of academic IT
+operations. In this paper we cover the approach taken to manage mobile, field
+deployed Smartboards funded by the USDA without adding significant overhead to
+the organization orchestrating the service and responsible for its operation.
+In this case, the service spans multiple independent administrative domains, an
+environment ripe for sub-optimal deployments and finger pointing in dealing
+with issues. We document the identification of applicable metrics, the
+deployment of relevant instrumentation and the implementation of management
+interfaces that reduce operational overhead while enabling a better user
+experience.    <b>  </b>  </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:28.05pt;margin-bottom:
+0in;margin-left:36.5pt;margin-bottom:.0001pt'>Key words: IP, Service
+performance, Cisco WebEx Board, Raspberry PI, SaaS, Monitoring. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-right:22.3pt'>Neither the entire paper nor any
+part of its content has been published or has been accepted for publication
+elsewhere. It has not been submitted to any other journal. </p>
+
+<h1 style='margin-top:0in;margin-right:0in;margin-bottom:8.05pt;margin-left:
+17.25pt;text-indent:-.25in'><span style='line-height:107%'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span>Introduction
+</h1>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:8.4pt;
+margin-left:-.25pt'>Distance Education is made possible by real time
+collaboration and interaction which in turn are enabled by a set of ever
+improving set of technologies and services. This evolution and these
+improvements provide the tools for delivering a very rich and effective
+learning experience regardless of the geographical location of either students
+or expert instructors. Distance Education and Distance Collaboration are
+particularly impactful in communities lacking the resources to provide access
+to highly experienced teachers, professors or professionals.  </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:8.4pt;
+margin-left:-.25pt'>The deployment and operation of conferencing platforms is
+now easier than ever due to the availability of reliable, high-bandwidth
+networks, centrally managed control plane for SaaS (Software as a Service)
+offerings and the availability of many types of end-point devices that can be deployed
+to the remote locations. The process of virtualizing the classroom requires
+less involvement of traditional IT and relies on existing, commoditized
+infrastructures and cloud-based services easy to purchase off the shelf. IT
+organizations of the involved institutions are often bypassed in the product
+selection process and the operational model definition. While acquiring and
+deploying these solutions is easy, their management can become a challenge when
+issues occur. On one hand, current IT organizations are not well equipped to
+manage service overlays such as SaaS based solutions. On the other hand, SaaS
+based delivery relies on the good functioning of multiple management domains
+without cross domain visibility.  </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:8.4pt;
+margin-left:-.25pt'>In this paper we detail the work of designing and
+implementing a management platform for a conferencing service launched by East
+Carolina University and distributed over multiple admin domains. The project
+offered a collaboration opportunity between students, graduate and
+undergraduate, from two distinct departments: Information and Computer
+Technology [1], and Computer Science [2]. The task assigned to the team was to
+deploy a monitoring solution enabling service self-management and joint
+management by the stakeholders in this conferencing service. </p>
+
+<p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+line-height:107%'> </p>
+
+<h1 style='margin-top:0in;margin-right:0in;margin-bottom:8.05pt;margin-left:
+17.25pt;text-indent:-.25in'><span style='line-height:107%'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span>Problem
+Definition </h1>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.3pt;
+margin-left:-.25pt'>Department of Technology Systems at East Carolina
+University (ECU) received a grant from US Department of Agriculture (USDA) [3]
+to purchase Cisco WebEx boards [4] and deploy them to 12 colleges and high
+schools across Eastern North Carolina to facilitate distance education (Figure
+1). </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:-.4pt;margin-bottom:1.25pt;
+margin-left:0in;text-indent:0in;line-height:107%'><img width=468 height=162
+id="Picture 940" src="images/images_paper/picture001.jpg"></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:8.35pt;
+margin-left:-.25pt'>Figure 1. Footprint of the Planned Distance Education
+Service </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>This new service enables a more engaging, collaborative
+instructional experience involving students in multiple classrooms across
+Eastern North Carolina and ECU instructors. The potential positive impact of
+this service is significant. The USDA grant covers the cost of the hardware and
+the WebEx cloud-based service provided by Cisco [5].  </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:9.1pt;
+margin-left:-.25pt'>Cloud-based services have been heavily marketed to give the
+impression that with the purchase of the endpoints and the service, the only
+thing needed to turn this offering into production is to assemble and deploy
+the WebEx boards. This is one of the reasons why organizations often time
+decide to skip working with their internal IT team to plan the rollout of
+cloud-based services. The practical aspects of operating IT services do however
+require answers to key operational questions: </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.45pt;
+margin-left:.5in;text-indent:-.25in;line-height:109%'><span style='line-height:
+109%'>•<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><b>How will these assets be tracked once they are deployed?</b>
+At a minimum, the service owner (ECU) should know if the endpoint is connected
+and what is the local network information. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.95pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>What
+is the quality of the control-plane path?</b> ECU and the partner organizations
+need to know if the WebEx service is available to set up the sessions. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.95pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>What
+is the quality of the data-plane path?</b> ECU and the partner organizations
+need to know if sessions established between various locations will deliver a
+good user experience </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>When
+there is an issue, who is responsible for it?</b> ECU and the partner
+organizations need to have the data that helps isolate fault domains and
+support any trouble-tickets opened with service providers. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>Many of these questions might be answerable should ECU or
+the partner organizations have full management visibility in the WebEx service;
+however, that is rarely the case. Ultimately, cloud-based services insert
+multiple management domains in the service delivery path: Local IT, Internet
+Service Provider (ISP), Internet Backbone and Cloud Service Provider (WebEx) as
+shown in Figure 3. This leads to significant uncertainty on which domain owns
+the cause of an issue experienced by the service. </p>
+
+<p class=MsoNormal align=right style='margin-top:0in;margin-right:72.55pt;
+margin-bottom:5.85pt;margin-left:0in;text-align:right;text-indent:0in;
+line-height:107%'><img width=316 height=215 id="Picture 1042"
+src="images/images_paper/picture002.jpg"
+alt="A close up of a map&#10;&#10;Description automatically generated"> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:8.35pt;
+margin-left:-.25pt'>Figure 3. Management Domains for the WebEx Service. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:8.4pt;
+margin-left:-.25pt'>This uncertainty becomes very problematic when issues crop
+up in service operation leading to significant downtime while finger-pointing
+delays resolution. Even if ECU explicitly states that it will not be
+responsible for the operational details of the service, it will inevitably find
+itself spending resources on issues that have nothing to do with its own IT
+environment. Moreover, ECU will have no access to the IT infrastructure hosting
+these endpoints thus limiting effective support. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>The ECU team leading the service enablement project needed
+a solution that will enable it and the project stakeholders to have the
+visibility necessary to manage the assets, the infrastructure and the service
+involved in this offering. The goal is to gain this visibility and enable
+self-governance without requiring significant commitments from the IT teams at
+each of the locations, either in terms of configuration and policy changes or
+in terms of direct support. </p>
+
+</div>
+
+<span style='font-size:10.0pt;line-height:104%;font-family:"Arial",sans-serif;
+color:black'><br clear=all style='page-break-before:always'>
+</span>
+
+<div class=WordSection2>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:9.05pt;
+margin-left:-.25pt'>This problem statement spurred two cross-departmental
+projects: </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.9pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span>The
+development of an Edge Computing platform that can support services and tools
+in support of the main service without requiring local IT departments to modify
+their own environment [6] </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span>The
+development of a monitoring framework that enables effective yet simple
+management across multiple admin domains without requiring significant local IT
+resources </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:8.4pt;
+margin-left:-.25pt'>The second project is leveraging the compute resources
+provided by the first one and it is described in this paper. </p>
+
+<h1 style='margin-top:0in;margin-right:0in;margin-bottom:.05pt;margin-left:
+17.25pt;text-indent:-.25in'><span style='line-height:107%'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span>Solution
+Requirements </h1>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.25in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'><b> </b></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>Managing cloud-based services across the entire service
+delivery path is becoming an important aspect of cloud adoption [7]. In this
+case, to gain the information needed to enable self-management of the service
+without having to request local resources or support its was decided to attach
+Edge Computing resources to the stands supporting the WebEx boards [6]. These
+local compute resources can be used to install tools for monitoring and
+troubleshooting the service. With the tools being themselves cloud-based, all
+stakeholders can view, among many metrics, the status of their location and the
+locations of organizations involved in an upcoming call, can view the
+availability of the WebEx service and the path quality between locations. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:9.1pt;
+margin-left:-.25pt'>The monitoring solution needs to enable ECU to collect
+relevant operational information for the service: </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:1.0pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>Network
+Attachment Information</b> – Collect information about the local access layer
+where the WebEx board is connected. This information can be used for asset
+tracking based on IP address assignment and/or geolocation services.  </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:1.0pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>Location
+Availability Information</b> – Collect information that validates the
+availability of the access layer at a given location  </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>Network
+Path Quality</b> – Evaluate the quality of the network path between locations  <span
+style='font-family:"Segoe UI Symbol",sans-serif'>•</span>      <b>Service
+Availability Information</b> – Detect availability of WebEx service at all
+locations.<b>  </b></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:9.1pt;
+margin-left:-.25pt'>The solution must facilitate the self-management of the
+service without adding complexity to I, leading to a set of additional,
+operational requirements: </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.35pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>Manageable</b>
+– Simple provisioning and management of the data collection </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.9pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>Secure</b>
+– The platform should have a level of access security that meets the standard
+requirements of educational institutions </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.9pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>Pro-Active</b>
+– The platform should collect data that can provide an early warning about
+issues with the service, warnings issued prior to users experiencing them while
+in use  </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.95pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>Active
+</b>– Considering the presumed lack of or limited local support, the platform
+should provide user with the ability to collect data on demand and execute
+tests on demand that would help admins narrow down the fault domain and at a
+minimum be able to engage the organization managing the fault domain  </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>Non-intrusive</b>
+– The tests executed by the platform should not negatively impact compliance or
+performance. For example, the platform should not listen to traffic unless
+explicitly requested and allowed by the local IT organization. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:8.35pt;
+margin-left:-.25pt'>The subsequent sections detail the technology and design
+choices for this platform. </p>
+
+<h1 style='margin-top:0in;margin-right:0in;margin-bottom:.05pt;margin-left:
+17.25pt;text-indent:-.25in'><span style='line-height:107%'>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span>Target
+Metrics </h1>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.25in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'><b> </b></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>Traditional IT organizations are currently siloed around
+aspects of service delivery: network and transport, data center, applications,
+security, etc [8]. This segmentation was driven by increasingly complex
+technologies in each of these service delivery domains. While in smaller
+organizations these siloed are reflected in domains of expertise mastered by
+members of the staff, in medium and large organizations, </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:8.4pt;
+margin-left:-.25pt'>IT organizational charts identify specific teams for each
+of the domains mentioned. This segmentation is naturally reflected in the
+skills developed by respective teams, the operating processes they develop, and
+the tools used to manage the scope of the infrastructure they are responsible
+for. Most of the time the monitoring and management tools are collecting domain
+specific data. Analytics and domain specific heuristics are applied to these
+data sets to determine the overall health of that section of the
+infrastructure. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:8.4pt;
+margin-left:-.25pt'>This traditional approach to infrastructure and service
+management promotes a narrow perspective on the quality of the overall
+performance of the IT environment. Despite deploying many monitoring tools, IT
+organizations fail to detect issues experienced by the users. Moreover, despite
+collecting large monitoring data sets, and even when using expensive data
+mining tools, IT organizations drown in information rather than being able to
+have a better view of the IT environment. Too much data and an inability to
+know where to start troubleshooting can reduce effective decision making. The
+migration to cloud is exacerbating these issues. IT organizations more and more
+are lacking visibility across the entire service delivery path [9].  </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:8.4pt;
+margin-left:-.25pt'>These considerations, along with the solution requirements
+described in Section 3, drove the project team towards selecting monitoring
+metrics focused on User Experience [10] rather than just connectivity. This
+type of information is also intuitively understood by the service users who do
+not need to be networking experts to be able to understand the state of the
+service and, when necessary engage the right organization for support. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:9.1pt;
+margin-left:-.25pt'>The project team decided the platform should collect the
+following foundational and meta metrics: </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:8.25pt;margin-bottom:
+.7pt;margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>Foundational
+Metrics</b> – Directly related to the operation and performance of the
+infrastructure <span style='font-family:"Courier New"'>o</span>  <i>Local IP
+address, IP address of the gateway, Global IP address</i> – This information
+helps administrators learn or confirm the location of the smartboard even
+though this data is collected for the device running the monitoring tests </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.55pt;
+margin-left:1.0in;text-indent:-.25in'><span style='line-height:104%;font-family:
+"Courier New"'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><i>Latency,
+Drops, Jitter</i> for the path to the WebEx service (Control Plane for the
+service) and for the path between locations. This data should be collected
+using ICMP [11], TCP and UDP protocols. ICMP PING is the simplest, most generic
+option, TCP based tests more accurately determine the quality of the path for
+the control plane. The UDP based test more accurately determine the quality of
+the path for the data plane </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:1.9pt;
+margin-left:1.0in;text-indent:-.25in'><span style='line-height:104%;font-family:
+"Courier New"'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span>Service
+availability based on service controller reachability </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:8.25pt;margin-bottom:
+1.2pt;margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>Meta
+Metrics</b> – Calculated based on foundational metrics and providing an overall
+insight on the quality of the services delivered <span style='font-family:"Courier New"'>o</span>
+           <i>Mean Opinion Score (MOS)</i> calculated based on the latency, drops
+and jitter data [11] </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:1.0in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.35pt;
+margin-left:72.5pt'>EffectiveLatency = (AverageLatency + Jitter*2 + 10) </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:.65pt;
+margin-left:0in;text-indent:0in'><span style='font-size:11.0pt;line-height:
+104%;font-family:"Calibri",sans-serif'>                        </span>            if
+EffectiveLatency &lt; 160ms, then R=93.2-(EffectiveLatency/40) </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:1.05pt;
+margin-left:0in;text-indent:0in'><span style='font-size:11.0pt;line-height:
+104%;font-family:"Calibri",sans-serif'>                        </span>            else
+R= 93.2 – (EffectiveLatency-120)/10 </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:274.95pt;margin-bottom:
+1.85pt;margin-left:1.5in;text-indent:-.5in'>R’=R-(PacketLoss*2.5) if R’&lt;0
+then MOS=1 </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:51.75pt;margin-bottom:
+1.85pt;margin-left:108.5pt'>if 0&lt;R’&lt;100 then MOS=1+(0.035)*R’+(0.000007)*R’*(R’-60)*(100-R’)
+if R’&gt;=100 then MOS=4.5 </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.35pt;
+margin-left:72.5pt'>This variable truly is an objective, algorithmic estimate
+of Voice Quality that can be mapped to the known MOS scores IT professionals
+are familiar with </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:.05pt;
+margin-left:1.0in;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:1.25pt;
+margin-left:1.0in;text-indent:-.25in'><span style='line-height:104%;font-family:
+"Courier New"'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><i>Estimated
+Throughput</i> calculated based on the latency and drops data [12] </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:1.0in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.35pt;
+margin-left:72.5pt'>MaxThroughputRate = (MSS/RTT)*(1/sqrt(p)) </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:1.0in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:72.5pt'>where: </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.35pt;
+margin-left:72.5pt'>MSS = 1460 </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:230.7pt;margin-bottom:
+.35pt;margin-left:72.5pt'>RTT = Round Trip Time (to a target) p = PacketLoss </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:1.0in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:1.15pt;
+margin-left:1.0in;text-indent:-.25in'><span style='line-height:104%;font-family:
+"Courier New"'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><i>Application
+Performance Index (APDEX)</i> calculated based on the observed vs expected
+service performance [13] </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:1.0in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.35pt;
+margin-left:72.5pt'>Define TargetResponseTime (either through user input or
+based on industry best practices) </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:1.0in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.35pt;
+margin-left:72.5pt'>Create 3 buckets: </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:.7pt;
+margin-left:0in;text-indent:0in'><span style='font-size:11.0pt;line-height:
+104%;font-family:"Calibri",sans-serif'>                        </span>            Satisfied
+– Tests where ResponseTime &lt; TargetResponseTime </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:.7pt;
+margin-left:0in;text-indent:0in'><span style='font-size:11.0pt;line-height:
+104%;font-family:"Calibri",sans-serif'>                        </span>            Tolerating
+– Tests where ResponseTime &gt; TargetResponseTime  </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:.65pt;
+margin-left:0in;text-indent:0in'><span style='font-size:11.0pt;line-height:
+104%;font-family:"Calibri",sans-serif'>                        </span>            Frustrated
+– Tests where ResponseTime &gt; (4*TargetResponseTime) </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:1.0in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:8.45pt;
+margin-left:72.5pt'>APDEX = ((Satisfied Tests) + (Tolerating Tests)/2) / (Total
+Number of Tests) </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>The two types of metrics help shape two distinct
+perspective on the service and enable two distinct activities summarized in
+Table 1. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.35pt;
+margin-left:-.25pt'>Table 1. Metric-Type Applicability Matrix </p>
+
+<table class=TableGrid border=0 cellspacing=0 cellpadding=0 width=623
+ style='width:467.55pt;margin-left:.25pt;border-collapse:collapse'>
+ <tr style='height:26.9pt'>
+  <td width=92 style='width:68.65pt;border:solid black 1.0pt;padding:.55pt 2.6pt 0in 0in;
+  height:26.9pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+  margin-left:6.55pt;margin-bottom:.0001pt;text-indent:0in;line-height:107%'><b>Metric
+  Type </b></p>
+  </td>
+  <td width=55 valign=top style='width:41.4pt;border-top:solid black 1.0pt;
+  border-left:none;border-bottom:solid black 1.0pt;border-right:none;
+  padding:.55pt 2.6pt 0in 0in;height:26.9pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=123 style='width:92.2pt;border:solid black 1.0pt;border-left:none;
+  padding:.55pt 2.6pt 0in 0in;height:26.9pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+  margin-left:.65pt;margin-bottom:.0001pt;text-indent:0in;line-height:107%'><b>Relevancy
+  </b></p>
+  </td>
+  <td width=55 valign=top style='width:41.4pt;border-top:solid black 1.0pt;
+  border-left:none;border-bottom:solid black 1.0pt;border-right:none;
+  padding:.55pt 2.6pt 0in 0in;height:26.9pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=299 style='width:223.9pt;border:solid black 1.0pt;border-left:none;
+  padding:.55pt 2.6pt 0in 0in;height:26.9pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+  margin-left:61.5pt;margin-bottom:.0001pt;text-indent:0in;line-height:107%'><b>Applicability
+  </b></p>
+  </td>
+ </tr>
+ <tr style='height:51.3pt'>
+  <td width=92 valign=top style='width:68.65pt;border-top:none;border-left:
+  solid black 1.0pt;border-bottom:none;border-right:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:51.3pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+  margin-left:5.4pt;margin-bottom:.0001pt;text-indent:0in;line-height:107%'>Foundational
+  </p>
+  </td>
+  <td width=55 valign=top style='width:41.4pt;border:none;padding:.55pt 2.6pt 0in 0in;
+  height:51.3pt'>
+  <p class=MsoNormal align=center style='margin-top:0in;margin-right:5.7pt;
+  margin-bottom:0in;margin-left:21.1pt;margin-bottom:.0001pt;text-align:center;
+  text-indent:0in;line-height:108%'><span style='font-family:"Segoe UI Symbol",sans-serif'>•</span>
+  <span style='font-family:"Segoe UI Symbol",sans-serif'>•</span> </p>
+  <p class=MsoNormal align=center style='margin-top:0in;margin-right:0in;
+  margin-bottom:0in;margin-left:12.65pt;margin-bottom:.0001pt;text-align:center;
+  text-indent:0in;line-height:107%'><span style='font-family:"Segoe UI Symbol",sans-serif'>•</span>
+  </p>
+  </td>
+  <td width=123 valign=top style='width:92.2pt;border:none;border-right:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:51.3pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:.7pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>IT staff </p>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:.65pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>Service providers </p>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Service managers </p>
+  </td>
+  <td width=55 valign=top style='width:41.4pt;border:none;padding:.55pt 2.6pt 0in 0in;
+  height:51.3pt'>
+  <p class=MsoNormal align=center style='margin-top:0in;margin-right:5.7pt;
+  margin-bottom:0in;margin-left:21.1pt;margin-bottom:.0001pt;text-align:center;
+  text-indent:0in;line-height:107%'><span style='font-family:"Segoe UI Symbol",sans-serif'>•</span>
+  <span style='font-family:"Segoe UI Symbol",sans-serif'>•</span> </p>
+  </td>
+  <td width=299 valign=top style='width:223.9pt;border:none;border-right:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:51.3pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:2.25pt;margin-bottom:
+  0in;margin-left:0in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'>Assess
+  infrastructure readiness for the service Provide guidance for infrastructure
+  changes needed to support the service or improve delivery quality </p>
+  </td>
+ </tr>
+ <tr style='height:13.15pt'>
+  <td width=92 valign=top style='width:68.65pt;border-top:none;border-left:
+  solid black 1.0pt;border-bottom:none;border-right:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:13.15pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=55 valign=top style='width:41.4pt;border:none;padding:.55pt 2.6pt 0in 0in;
+  height:13.15pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=123 valign=top style='width:92.2pt;border:none;border-right:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:13.15pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=55 valign=top style='width:41.4pt;border:none;padding:.55pt 2.6pt 0in 0in;
+  height:13.15pt'>
+  <p class=MsoNormal align=center style='margin-top:0in;margin-right:0in;
+  margin-bottom:0in;margin-left:12.65pt;margin-bottom:.0001pt;text-align:center;
+  text-indent:0in;line-height:107%'><span style='font-family:"Segoe UI Symbol",sans-serif'>•</span>
+  </p>
+  </td>
+  <td width=299 valign=top style='width:223.9pt;border:none;border-right:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:13.15pt'>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Proactively identify issues </p>
+  </td>
+ </tr>
+ <tr style='height:13.1pt'>
+  <td width=92 valign=top style='width:68.65pt;border-top:none;border-left:
+  solid black 1.0pt;border-bottom:none;border-right:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:13.1pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=55 valign=top style='width:41.4pt;border:none;padding:.55pt 2.6pt 0in 0in;
+  height:13.1pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=123 valign=top style='width:92.2pt;border:none;border-right:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:13.1pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=55 valign=top style='width:41.4pt;border:none;padding:.55pt 2.6pt 0in 0in;
+  height:13.1pt'>
+  <p class=MsoNormal align=center style='margin-top:0in;margin-right:0in;
+  margin-bottom:0in;margin-left:12.65pt;margin-bottom:.0001pt;text-align:center;
+  text-indent:0in;line-height:107%'><span style='font-family:"Segoe UI Symbol",sans-serif'>•</span>
+  </p>
+  </td>
+  <td width=299 valign=top style='width:223.9pt;border:none;border-right:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:13.1pt'>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Troubleshoot issues </p>
+  </td>
+ </tr>
+ <tr style='height:33.65pt'>
+  <td width=92 valign=top style='width:68.65pt;border:solid black 1.0pt;
+  border-top:none;padding:.55pt 2.6pt 0in 0in;height:33.65pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=55 valign=top style='width:41.4pt;border:none;border-bottom:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:33.65pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=123 valign=top style='width:92.2pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:33.65pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=55 valign=top style='width:41.4pt;border:none;border-bottom:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:33.65pt'>
+  <p class=MsoNormal align=center style='margin-top:0in;margin-right:0in;
+  margin-bottom:0in;margin-left:12.65pt;margin-bottom:.0001pt;text-align:center;
+  text-indent:0in;line-height:107%'><span style='font-family:"Segoe UI Symbol",sans-serif'>•</span>
+  </p>
+  </td>
+  <td width=299 valign=top style='width:223.9pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:33.65pt'>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Provide relevant data to IT organizations collaborating on
+  addressing an issue </p>
+  </td>
+ </tr>
+ <tr style='height:64.4pt'>
+  <td width=92 valign=top style='width:68.65pt;border-top:none;border-left:
+  solid black 1.0pt;border-bottom:none;border-right:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:64.4pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+  margin-left:5.4pt;margin-bottom:.0001pt;text-indent:0in;line-height:107%'>Meta
+  </p>
+  </td>
+  <td width=55 valign=top style='width:41.4pt;border:none;padding:.55pt 2.6pt 0in 0in;
+  height:64.4pt'>
+  <p class=MsoNormal align=center style='margin-top:0in;margin-right:5.7pt;
+  margin-bottom:0in;margin-left:21.1pt;margin-bottom:.0001pt;text-align:center;
+  text-indent:0in;line-height:108%'><span style='font-family:"Segoe UI Symbol",sans-serif'>•</span>
+  <span style='font-family:"Segoe UI Symbol",sans-serif'>•</span> <span
+  style='font-family:"Segoe UI Symbol",sans-serif'>•</span> </p>
+  <p class=MsoNormal align=center style='margin-top:0in;margin-right:0in;
+  margin-bottom:0in;margin-left:12.65pt;margin-bottom:.0001pt;text-align:center;
+  text-indent:0in;line-height:107%'><span style='font-family:"Segoe UI Symbol",sans-serif'>•</span>
+  </p>
+  </td>
+  <td width=123 valign=top style='width:92.2pt;border:none;border-right:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:64.4pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:.65pt;
+  margin-left:0in;text-align:justify;text-justify:inter-ideograph;text-indent:
+  0in;line-height:107%'>Program managers </p>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:.65pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>Service Manager </p>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:.65pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>Instructors </p>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Participants </p>
+  </td>
+  <td width=55 valign=top style='width:41.4pt;border:none;padding:.55pt 2.6pt 0in 0in;
+  height:64.4pt'>
+  <p class=MsoNormal align=center style='margin-top:0in;margin-right:5.7pt;
+  margin-bottom:12.4pt;margin-left:21.1pt;text-align:center;text-indent:0in;
+  line-height:108%'><span style='font-family:"Segoe UI Symbol",sans-serif'>•</span>
+  <span style='font-family:"Segoe UI Symbol",sans-serif'>•</span> </p>
+  <p class=MsoNormal align=center style='margin-top:0in;margin-right:0in;
+  margin-bottom:0in;margin-left:12.65pt;margin-bottom:.0001pt;text-align:center;
+  text-indent:0in;line-height:107%'><span style='font-family:"Segoe UI Symbol",sans-serif'>•</span>
+  </p>
+  </td>
+  <td width=299 valign=top style='width:223.9pt;border:none;border-right:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:64.4pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:.35pt;
+  margin-left:0in;text-indent:0in;line-height:110%'>Determine overall
+  performance of the service Determine the historical performance of the
+  service for reporting purposes </p>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-align:justify;
+  text-justify:inter-ideograph;text-indent:0in;line-height:107%'>Determine
+  service readiness for scheduling and/or starting upcoming sessions </p>
+  </td>
+ </tr>
+ <tr style='height:21.25pt'>
+  <td width=92 valign=top style='width:68.65pt;border:solid black 1.0pt;
+  border-top:none;padding:.55pt 2.6pt 0in 0in;height:21.25pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=55 valign=top style='width:41.4pt;border:none;border-bottom:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:21.25pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=123 valign=top style='width:92.2pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:21.25pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=55 valign=top style='width:41.4pt;border:none;border-bottom:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:21.25pt'>
+  <p class=MsoNormal align=center style='margin-top:0in;margin-right:0in;
+  margin-bottom:0in;margin-left:12.65pt;margin-bottom:.0001pt;text-align:center;
+  text-indent:0in;line-height:107%'><span style='font-family:"Segoe UI Symbol",sans-serif'>•</span>
+  </p>
+  </td>
+  <td width=299 valign=top style='width:223.9pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.55pt 2.6pt 0in 0in;height:21.25pt'>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Determine status of service for ongoing sessions </p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>In managing the meta metrics, from calculating APDEX to
+detecting a fault state for MOS, there are two possible approaches to making
+the information useful to users who are not very experienced or do not have IT
+core competency (most of the service users will fit in this category). These
+two options are presented in Table 2. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.35pt;
+margin-left:-.25pt'>Table 2. Contextualizing Data for the Users </p>
+
+<table class=TableGrid border=0 cellspacing=0 cellpadding=0 width=623
+ style='width:467.55pt;margin-left:.25pt;border-collapse:collapse'>
+ <tr style='height:45.35pt'>
+  <td width=132 style='width:98.8pt;border:solid black 1.0pt;padding:.6pt 2.65pt 0in 5.4pt;
+  height:45.35pt'>
+  <p class=MsoNormal align=center style='margin:0in;margin-bottom:.0001pt;
+  text-align:center;text-indent:0in;line-height:107%'><b>Context in Which Data
+  is Presented </b></p>
+  </td>
+  <td width=222 valign=top style='width:166.5pt;border:solid black 1.0pt;
+  border-left:none;padding:.6pt 2.65pt 0in 5.4pt;height:45.35pt'>
+  <p class=MsoNormal align=center style='margin-top:0in;margin-right:2.0pt;
+  margin-bottom:0in;margin-left:0in;margin-bottom:.0001pt;text-align:center;
+  text-indent:0in;line-height:107%'><b>Description </b></p>
+  </td>
+  <td width=114 valign=top style='width:85.5pt;border:solid black 1.0pt;
+  border-left:none;padding:.6pt 2.65pt 0in 5.4pt;height:45.35pt'>
+  <p class=MsoNormal align=center style='margin-top:0in;margin-right:2.05pt;
+  margin-bottom:0in;margin-left:0in;margin-bottom:.0001pt;text-align:center;
+  text-indent:0in;line-height:107%'><b>Pros </b></p>
+  </td>
+  <td width=156 valign=top style='width:116.75pt;border:solid black 1.0pt;
+  border-left:none;padding:.6pt 2.65pt 0in 5.4pt;height:45.35pt'>
+  <p class=MsoNormal align=center style='margin-top:0in;margin-right:2.1pt;
+  margin-bottom:0in;margin-left:0in;margin-bottom:.0001pt;text-align:center;
+  text-indent:0in;line-height:107%'><b>Cons </b></p>
+  </td>
+ </tr>
+ <tr style='height:37.75pt'>
+  <td width=132 valign=top style='width:98.8pt;border:solid black 1.0pt;
+  border-top:none;padding:.6pt 2.65pt 0in 5.4pt;height:37.75pt'>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Industry Standards and Best Practices </p>
+  </td>
+  <td width=222 valign=top style='width:166.5pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.65pt 0in 5.4pt;height:37.75pt'>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Use industry best practices to provide the targets for
+  nominal operation and trigger alerts. Same </p>
+  </td>
+  <td width=114 valign=top style='width:85.5pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.65pt 0in 5.4pt;height:37.75pt'>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Higher level of objectivity based on a large set of </p>
+  </td>
+  <td width=156 valign=top style='width:116.75pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.65pt 0in 5.4pt;height:37.75pt'>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Provides the ideal case scenario in environments that </p>
+  </td>
+ </tr>
+ <tr style='height:86.55pt'>
+  <td width=132 valign=top style='width:98.8pt;border:solid black 1.0pt;
+  border-top:none;padding:.6pt 2.65pt 0in 5.4pt;height:86.55pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=222 valign=top style='width:166.5pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.65pt 0in 5.4pt;height:86.55pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.05pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>targets are used to
+  calculate APDEX. </p>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>Example [14, 15]: </p>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Good Voice Quality: Latency </p>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>&lt;50ms, Jitter&lt;20ms, Drops 0.1-1% </p>
+  </td>
+  <td width=114 valign=top style='width:85.5pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.65pt 0in 5.4pt;height:86.55pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:1.2pt;margin-bottom:
+  0in;margin-left:0in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'>observations
+  and expert analysis </p>
+  </td>
+  <td width=156 valign=top style='width:116.75pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.65pt 0in 5.4pt;height:86.55pt'>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>might not afford the resources for an ideal infrastructure </p>
+  </td>
+ </tr>
+ <tr style='height:148.6pt'>
+  <td width=132 valign=top style='width:98.8pt;border:solid black 1.0pt;
+  border-top:none;padding:.6pt 2.65pt 0in 5.4pt;height:148.6pt'>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Historical Data </p>
+  </td>
+  <td width=222 valign=top style='width:166.5pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.65pt 0in 5.4pt;height:148.6pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:1.6pt;margin-bottom:
+  8.0pt;margin-left:0in;text-indent:0in;line-height:107%'>Use historical data
+  collected from the current environment, correlated with user feedback on the
+  quality of the service. </p>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.1pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>Example: </p>
+  <p class=MsoNormal style='margin-top:0in;margin-right:.55pt;margin-bottom:
+  .05pt;margin-left:0in;text-indent:0in;line-height:107%'>No User Complaints
+  between 15:00 and 17:00 on Tuesday, </p>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>February 3, 2020 when Average </p>
+  <p class=MsoNormal style='margin-top:0in;margin-right:.55pt;margin-bottom:
+  0in;margin-left:0in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'>Latency
+  was “x”, Average Jitter was “y”, Drops were “z%” </p>
+  </td>
+  <td width=114 valign=top style='width:85.5pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.65pt 0in 5.4pt;height:148.6pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:2.35pt;margin-bottom:
+  0in;margin-left:0in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'>Accounts
+  for the constraints of the environment and the tradeoffs acceptable to the
+  users </p>
+  </td>
+  <td width=156 valign=top style='width:116.75pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.65pt 0in 5.4pt;height:148.6pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:1.9pt;margin-bottom:
+  0in;margin-left:0in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'>Requires
+  active collection of user feedback in parallel with data being collected by
+  the monitoring platform </p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>The key goal of the project team is to put together a
+platform that is intuitive and easy to use, a platform helpful to most users
+while collecting sufficiently detailed information to also help IT
+professionals with more in-depth troubleshooting when necessary. Users should
+not have to know what latency, jitter and drops levels are needed for a good
+session, they just need to know if the service is ready to provide a good
+session.   </p>
+
+<h1 style='margin-top:0in;margin-right:0in;margin-bottom:.05pt;margin-left:
+17.25pt;text-indent:-.25in'><span style='line-height:107%'>5.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span>Data
+Collection </h1>
+
+<p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:8.4pt;
+margin-left:-.25pt'>The solution must take into consideration the typical
+management constraints of SaaS based services. It could not assume management
+access will be available to the actual WebEx board or the WebEx service
+controller beyond being able to pull publicly available statistics. For this
+reason, the solution is an overlay with monitoring endpoints mirroring the
+WebEx boards, connected to the same access networks.  </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:11.7pt;margin-bottom:
+.35pt;margin-left:-.25pt'>The relevant monitoring data can be collected in two
+distinct ways, each with its benefits and challenges as summarized in Table 3.
+Table 3. Data Collection Methods<span style='font-size:11.0pt;line-height:104%'>
+</span></p>
+
+<table class=TableGrid border=0 cellspacing=0 cellpadding=0 width=623
+ style='width:467.55pt;margin-left:.25pt;border-collapse:collapse'>
+ <tr style='height:45.3pt'>
+  <td width=119 style='width:89.2pt;border:solid black 1.0pt;padding:.6pt 2.6pt 0in 5.4pt;
+  height:45.3pt'>
+  <p class=MsoNormal align=center style='margin:0in;margin-bottom:.0001pt;
+  text-align:center;text-indent:0in;line-height:107%'><b>Data Collection Method
+  </b></p>
+  </td>
+  <td width=120 valign=top style='width:89.75pt;border:solid black 1.0pt;
+  border-left:none;padding:.6pt 2.6pt 0in 5.4pt;height:45.3pt'>
+  <p class=MsoNormal align=center style='margin-top:0in;margin-right:2.8pt;
+  margin-bottom:0in;margin-left:0in;margin-bottom:.0001pt;text-align:center;
+  text-indent:0in;line-height:107%'><b>Description </b></p>
+  </td>
+  <td width=166 valign=top style='width:124.8pt;border:solid black 1.0pt;
+  border-left:none;padding:.6pt 2.6pt 0in 5.4pt;height:45.3pt'>
+  <p class=MsoNormal align=center style='margin-top:0in;margin-right:2.85pt;
+  margin-bottom:0in;margin-left:0in;margin-bottom:.0001pt;text-align:center;
+  text-indent:0in;line-height:107%'><b>Pros </b></p>
+  </td>
+  <td width=218 valign=top style='width:163.8pt;border:solid black 1.0pt;
+  border-left:none;padding:.6pt 2.6pt 0in 5.4pt;height:45.3pt'>
+  <p class=MsoNormal align=center style='margin-top:0in;margin-right:2.8pt;
+  margin-bottom:0in;margin-left:0in;margin-bottom:.0001pt;text-align:center;
+  text-indent:0in;line-height:107%'><b>Cons </b></p>
+  </td>
+ </tr>
+ <tr style='height:161.05pt'>
+  <td width=119 valign=top style='width:89.2pt;border:solid black 1.0pt;
+  border-top:none;padding:.6pt 2.6pt 0in 5.4pt;height:161.05pt'>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Inline Monitoring </p>
+  </td>
+  <td width=120 valign=top style='width:89.75pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.6pt 0in 5.4pt;height:161.05pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:1.1pt;margin-bottom:
+  0in;margin-left:0in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'>Monitor
+  the real traffic and analyze the timing for session setup and resource
+  request/download </p>
+  </td>
+  <td width=166 valign=top style='width:124.8pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.6pt 0in 5.4pt;height:161.05pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.1pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>It is a very accurate
+  measurement of the actual user experience. </p>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Provides a wealth of data related to the overall service,
+  from usage to quality. </p>
+  </td>
+  <td width=218 valign=top style='width:163.8pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.6pt 0in 5.4pt;height:161.05pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:.1pt;margin-bottom:
+  8.1pt;margin-left:0in;text-indent:0in;line-height:107%'>It is an intrusive
+  approach requiring compliance evaluation related to security and privacy. </p>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Data collection points might be difficult to deploy without
+  explicit </p>
+  <p class=MsoNormal style='margin-top:0in;margin-right:.1pt;margin-bottom:
+  8.05pt;margin-left:0in;text-indent:0in;line-height:107%'>authorization from
+  and involvement of the local IT organization. </p>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Reactive observation, data can be collected only when
+  sessions are in progress. </p>
+  </td>
+ </tr>
+ <tr style='height:58.15pt'>
+  <td width=119 valign=top style='width:89.2pt;border:solid black 1.0pt;
+  border-top:none;padding:.6pt 2.6pt 0in 5.4pt;height:58.15pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=120 valign=top style='width:89.75pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.6pt 0in 5.4pt;height:58.15pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=166 valign=top style='width:124.8pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.6pt 0in 5.4pt;height:58.15pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>&nbsp;</p>
+  </td>
+  <td width=218 valign=top style='width:163.8pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.6pt 0in 5.4pt;height:58.15pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:2.2pt;margin-bottom:
+  0in;margin-left:0in;margin-bottom:.0001pt;text-indent:0in;line-height:107%'>Depending
+  on implementation it might be expensive and negatively impact underlying
+  traffic. </p>
+  </td>
+ </tr>
+ <tr style='height:210.7pt'>
+  <td width=119 valign=top style='width:89.2pt;border:solid black 1.0pt;
+  border-top:none;padding:.6pt 2.6pt 0in 5.4pt;height:210.7pt'>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Synthetic </p>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Transactions </p>
+  </td>
+  <td width=120 valign=top style='width:89.75pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.6pt 0in 5.4pt;height:210.7pt'>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Initiate traffic that tests path quality, </p>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>service </p>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>availability, service response time  </p>
+  </td>
+  <td width=166 valign=top style='width:124.8pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.6pt 0in 5.4pt;height:210.7pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.05pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>Easy to implement without
+  requiring significant involvement of the local IT organization. </p>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.05pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>Deterministic, controlled
+  and periodic tests enabling a more generic assessment and a proactive
+  perspective on service monitoring. </p>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>Facilitates active workflows such as troubleshooting, or
+  data collection conditioned by triggered events. </p>
+  </td>
+  <td width=218 valign=top style='width:163.8pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:.6pt 2.6pt 0in 5.4pt;height:210.7pt'>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.05pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>Data is more generic and
+  less specific to applications or user workflows.  </p>
+  <p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.05pt;
+  margin-left:0in;text-indent:0in;line-height:107%'>Coordination between WebEx
+  board use and the tests is necessary to ensure the same access layer is being
+  used. </p>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>No information related to the actual WebEx board usage can
+  be collected by the platform however, this information is available through
+  service statistics provided </p>
+  <p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+  line-height:107%'>by the vendor and can be correlated with the monitoring
+  data. </p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:7.05pt;
+margin-left:0in;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>The synthetic transactions approach was adopted for the
+following reasons: </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.25pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>Ease
+of Deployment</b> – Enable the management overlay with minimal involvement of
+local IT organizations either in terms of local, physical resources needed, in
+terms of approval processes or in terms of support resources  </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.2pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>Pro-Active
+Capabilities</b> – Detect issues before users detect them to enable
+re-scheduling of sessions and resolution prior to session start </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.2pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>Enable
+On-Demand Tests</b> – Facilitate fault domain isolation either automatically or
+by IT professionals who can run on-demand tests through the platform  </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.2pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>Limited
+Impact</b> – Data collection should not negatively impact local traffic, WebEx
+or otherwise by either being a bottleneck or by adding significant load on the
+network </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b>Lower
+Cost</b> – The compute resources needed to support synthetic transactions is
+significantly lower than those that might be necessary for in line data
+collection.  </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>For this project, an agent based, SaaS (Software as a
+Service) tool is used. The SaaS option avoids the need to install and maintain
+dedicated backend infrastructure for the management tools. The agent is
+installed on the Edge Computing (EC) platform built to support the monitoring
+service (Figure 4) [6].  </p>
+
+<p class=MsoNormal align=right style='margin-top:0in;margin-right:0in;
+margin-bottom:5.8pt;margin-left:0in;text-align:right;text-indent:0in;
+line-height:107%'><img width=468 height=132 id="Picture 2171"
+src="images/images_paper/picture003.jpg"> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>Figure 4. Enclosure Design with Modular Hardware Assembly
+(top view and stand mounted). </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>The EC nodes are attached to the WebEx Board stands to
+provide a point of presence wherever the boards are deployed for both
+monitoring and troubleshooting purposes.<span style='font-size:11.0pt;
+line-height:104%'>  </span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>Agents are installed before the WebEx board is deployed in
+the field, with all the relevant layer 2 authentication information. When the
+EC device is powered up, the agent communicates with the cloudbased controller
+over port 443 and self-registers. The agent-controller communication is secure.
+Once registered, the agent is ready for scheduled or on demand tests configured
+via a centralized dashboard (see Figure 6). </p>
+
+<p class=MsoNormal align=center style='margin-top:0in;margin-right:0in;
+margin-bottom:5.9pt;margin-left:0in;text-align:center;text-indent:0in;
+line-height:107%'><img width=249 height=171 id="Picture 2262"
+src="images/images_paper/picture004.jpg"> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>Figure 6. EC Platform Management and Monitoring Service
+Operation </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>The agents are self-upgrading and they collect data even
+when they lose contact with the controller. Data collected while disconnected
+is locally stored and uploaded when the agent automatically re-connects to the
+controller once it becomes available again.  </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>The agents provide infrastructure and service performance
+data from a local perspective which is dependent on the local IT environment,
+the local access provider and the connectivity between the access provider and
+backbone infrastructures (Tier 2, Tier 1 providers or Research and Education
+Network providers). For an independent assessment of a SaaS service it is
+beneficial to use agents deployed outside the participating organization’s
+infrastructures, on public cloud providers. The deployed solution will include
+at least two such independent, public cloud hosted agents. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>Finally, an important capability of the monitoring platform
+sought by the project team is the ease of integration with other platforms and
+data sources. On one hand this capability is critical to the integration of
+other data sources. Additional information can be collected by interacting with
+open APIs provided by either the endpoints or the service. Combining multiple
+data sources provides a more complete perspective on the performance of the IT
+environments supporting the service and it facilitates an even more accurate
+fault domain isolation in the context of detected issues. On the other hand,
+integration with other controllers facilitates both dynamic service mapping and
+active troubleshooting [16,17]. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>A test environment simulating a multi-campus, multiple
+access type lab environment was developed for evaluating the solution prior to
+deployment on the EC platform (Figure 7). </p>
+
+<p class=MsoNormal align=right style='margin-top:0in;margin-right:17.3pt;
+margin-bottom:4.95pt;margin-left:0in;text-align:right;text-indent:0in;
+line-height:107%'><img width=433 height=162 id="Picture 2320"
+src="images/images_paper/picture005.jpg"> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>Figure 7. Lab Environment for Testing the Monitoring
+Platform </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:0in;
+margin-left:-.25pt;margin-bottom:.0001pt'>In the lab environment the end points
+for both wired and wireless access are Raspberry PI 4s [18]. This embedded
+compute platform used by the EC was benchmarked for use within the monitoring
+solution with the help of the Phoronix Test Suite [19]. </p>
+
+<p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+line-height:107%'><i> </i></p>
+
+<h1 style='margin-top:0in;margin-right:0in;margin-bottom:7.1pt;margin-left:
+17.25pt;text-indent:-.25in'><span style='line-height:107%'>6.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span>Data
+Visualization </h1>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>The management infrastructure was designed to be easy to
+use, informative and useful in troubleshooting issues. The key information is
+summarized on the dashboard which is meant to be accessible to all service
+users. In Figure 8 we show the platform dashboard while two monitoring agents,
+one on the Raspberry PI attached to the test WebEx board and one deployed in a
+Cloud provider (Digital Ocean) to use as a reference for service availability. </p>
+
+<p class=MsoNormal align=right style='margin-top:0in;margin-right:0in;
+margin-bottom:4.95pt;margin-left:0in;text-align:right;text-indent:0in;
+line-height:107%'><img width=467 height=212 id="Picture 2322"
+src="images/images_paper/picture006.jpg"> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>Figure 8. Management Service Dashboard </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>The dashboard captures the meta metrics described in
+Section 4, APPDEX is quantifying the overall health of the service, the “Test
+Status” and “Agent Status” gauges show the current status of the services and
+monitored locations while the map view and matrix view show detail the status
+of eache service at each location (color of the agent or the matrix vertex
+changes according to the alarm state of the location or the service). </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>To understand the performance of the network path and the
+WebEx service at a given location, a dedicated view is available for each agent
+as shown in Figure 9. </p>
+
+<p class=MsoNormal align=right style='margin-top:0in;margin-right:0in;
+margin-bottom:4.95pt;margin-left:0in;text-align:right;text-indent:0in;
+line-height:107%'><img width=468 height=212 id="Picture 2374"
+src="images/images_paper/picture007.jpg"> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>Figure 9. Performance of the Network Path for the WebEx
+Service at the Location of the Board </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>The agent view captures the foundational network metrics
+described in Section4 (Latency, Drops, Jitter, MOS and Estimated Throughput).
+The system is automatically analyzing the historical data to estimate the
+typical behavior of the service at that location. In Figure 9, the green lines
+represent the expected response time at a given hour during the day (the
+automatic baseline), the yellow line is the expected variability in data while
+the red line represents the limit above which data points are considered
+anomalous. This analysis is performed automatically, without requiring the user
+to have expertise in the monitored metrics. The baseline enables the users to
+know what to expect in terms of environment performance.  </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>Data is also collected for web-based applications, starting
+with basic response time and diving into the various components relevant to
+HTTP based services. Figure 10 shows response time for the WebEx service
+measured by the local agent. </p>
+
+<p class=MsoNormal align=right style='margin-top:0in;margin-right:51.0pt;
+margin-bottom:4.9pt;margin-left:0in;text-align:right;text-indent:0in;
+line-height:107%'><img width=365 height=210 id="Picture 2376"
+src="images/images_paper/picture008.jpg"> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>Figure 10. HTTP Response Time for the Monitored Service </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>An important component of the monitoring system is the
+alarm visualization meant to quickly summarize the current and past issues.
+Figure 11 shows the approach taken to visualize the start and close of an alarm
+state and to summarize the number of active alarms during every hour over the
+past 24 hours. </p>
+
+<p class=MsoNormal align=right style='margin-top:0in;margin-right:0in;
+margin-bottom:5.0pt;margin-left:0in;text-align:right;text-indent:0in;
+line-height:107%'><img width=467 height=112 id="Picture 2479"
+src="images/images_paper/picture009.jpg"> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>Figure 11. Summarization of the Environment Alarms. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>At the time of this writing data was actively collected
+only within the test environment as the system was still being prepared for
+deployment. The ECU-SciTech is the type of agent that will be deployed on all
+edge computing devices attached to the WebEx boards [6]. The external,
+cloud-based agent will be used in production as an off-premise reference
+however, it will be deployed a hosting location within the state. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>The solution was evaluated on multiple levels by the lead
+of the project deploying the WebEx boards and the ease of use received the
+highest score. The authors believe the community use will generate more
+feedback regarding data visualization which will be integrated in the second
+release of the solution. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:7.05pt;
+margin-left:0in;text-indent:0in;line-height:107%'> </p>
+
+<h1 style='margin-top:0in;margin-right:0in;margin-bottom:7.05pt;margin-left:
+17.25pt;text-indent:-.25in'><span style='line-height:107%'>7.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span>Innovation
+and Limitations </h1>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>In broad terms, there are two approaches to network and
+services monitoring: 1) Based on synthetic transactions (the approach described
+into this paper) and 2) Based on traffic analysis [20]. While both approaches
+have their own merits and together cover fully the monitoring needs of an IT
+environment, our research is focused on the former approach for the following
+reasons: </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.35pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span>Synthetic
+transactions enable deterministic, proactive monitoring </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:-.25in'><span
+style='line-height:104%'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>By not analyzing actual/live user flows, the common concerns
+around privacy are not an obstacle to deployment </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt;text-indent:-.25in'><span
+style='line-height:104%'>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Agent based monitoring facilitates easy deployment across
+complex, federated environments without requiring policy reviews or requests
+for explicit changes or access to local information </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:.5in;text-indent:-.25in'><span style='line-height:104%'>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span>To
+complete ITOM automation, agents are needed to facilitate active evaluation of
+troubleshooting steps or environment changes </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>The platform described in this paper is the first step in a
+larger research project into developing proactive, automated management of
+service overlays. At this stage, the platform and the analytics algorithms
+focus primarily on data collection, baselining the IT environment or the
+service footprint and finally on detecting anomalies. This capability is not
+currently offered in industry solutions. The goal is to continue the work of
+integrating such sensor/actuator agents with network and policy controllers to
+create self-healing networks as demonstrate in [17]. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>Unlike its counterpart approach of listening to actual user
+traffic, our approach only estimates user experience based on the response time
+of all participating services. The platform would also face challenges in
+finding a scalable way to simulate full user workflows which can be easily
+evaluated through flow capture. These limitations will make it difficult to
+troubleshoot some service issues however, it is the opinion of the authors that
+the issues that can be identified, isolated and troubleshot though this type of
+instrumentation will cover over 80% of the overall issues experienced by real
+IT environments. This assessment remains a topic of future research.   </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>While the solution presented in this paper is addressing a
+very specific use case, the type of instrumentation proposed by it becomes very
+powerful in enabling other capabilities important in IT management such as
+continuous security assessment, compliance verification and SLA verifications.
+The authors believe that this IoT approach to IT management lends itself to
+many opportunities for innovation.  </p>
+
+<h1 style='margin-top:0in;margin-right:0in;margin-bottom:7.1pt;margin-left:
+17.25pt;text-indent:-.25in'><span style='line-height:107%'>8.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span>Conclusions
+and Future Work </h1>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>Distance Education and Distance Collaboration are essential
+tools for engaging a wide range of students and communities in the education
+process while delivery rich, expert guided learning experiences. Enabling such
+delivery mechanisms has become easier with the availability of conferencing
+boards and SaaS based conferencing services. Managing such services is however
+challenging when they cover a diverse set of stakeholders and they do not
+include budget for explicit support by the IT teams of all involved
+organizations. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>This paper documents the approach, design and development
+of a management overlay for a video conferencing solution sponsored by the US
+Department of Agriculture supporting rural and underserved communities
+accessing expert faculty and educational content. The solution was developed by
+a faculty supervised interdisciplinary team of graduate and undergraduate
+students. It integrates state of the art concepts in monitoring cloud-based
+services across multiple admin domains and it leverages an in-house built,
+edge-computing platform. This cloud-based solution enables users without IT
+expertise to understand the current status of the service, proactively identify
+issues that might negatively impact performance and identify the right
+organization to contact when issues are detected. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>The monitoring platform has an immediate practical value by
+making the conferencing service more resilient and manageable. At the same
+time, this platform represents an environment for developing additional
+capabilities that would facilitate ease of use, automatic fault domain
+isolation and even intelligent troubleshooting. These additional capabilities
+will leverage statistical analysis and machine learning to automatically
+profile the local environments and provide guidance for performance
+optimization. They would also provide the data that can be used by domain
+specific expert systems to execute explicit troubleshooting steps which can
+either narrow down the cause of an issue or even solve issues independent of IT
+staff intervention.  </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.35pt;
+margin-left:-.25pt'>The nature of the service combined with the instrumentation
+provided by the Edge Computing [6] and the </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>Monitoring platforms provide a unique opportunity for
+future research in IT Operations Management (ITOM) Automation for cloud-based
+services in highly federated environments. It is envisioned that this type of
+research can lead to automated monitoring-management systems that can help
+reduce the load of understaffed IT organizations supporting education
+institutions. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:7.95pt;
+margin-left:0in;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;
+margin-left:0in;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+line-height:107%'>             </p>
+
+<h1 style='margin-top:0in;margin-right:0in;margin-bottom:.05pt;margin-left:
+-.25pt;text-indent:0in'>References </h1>
+
+<p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:16.7pt;text-indent:-16.7pt;line-height:200%'><span
+style='line-height:200%'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>East Carolina University, College of Engineering and Technology,
+Department of Technology Systems, Information and Computer Technology, <a
+href="https://cet.ecu.edu/techsystems/undergraduate-programs/information-computer-technology/"><span
+style='color:#0563C1'>https://cet.ecu.edu/techsystems/undergraduate</span></a><a
+href="https://cet.ecu.edu/techsystems/undergraduate-programs/information-computer-technology/"></a><a
+href="https://cet.ecu.edu/techsystems/undergraduate-programs/information-computer-technology/"><span
+style='color:#0563C1'>programs/information</span></a><a
+href="https://cet.ecu.edu/techsystems/undergraduate-programs/information-computer-technology/"><span
+style='color:#0563C1'>-</span></a><a
+href="https://cet.ecu.edu/techsystems/undergraduate-programs/information-computer-technology/"><span
+style='color:#0563C1'>computer</span></a><a
+href="https://cet.ecu.edu/techsystems/undergraduate-programs/information-computer-technology/"><span
+style='color:#0563C1'>-</span></a><a
+href="https://cet.ecu.edu/techsystems/undergraduate-programs/information-computer-technology/"><span
+style='color:#0563C1'>technology/</span></a><a
+href="https://cet.ecu.edu/techsystems/undergraduate-programs/information-computer-technology/"><span
+style='color:black;text-decoration:none'> </span></a></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:16.7pt;text-indent:-16.7pt;line-height:200%'><span
+style='line-height:200%'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>East Carolina University, College of Engineering and Technology,
+Computer Science Department, <a href="https://cet.ecu.edu/csci/"><span
+style='color:#0563C1'>https://cet.ecu.edu/csci/</span></a><a
+href="https://cet.ecu.edu/csci/"><span style='color:black;text-decoration:none'>
+</span></a></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:10.95pt;
+margin-left:16.7pt;text-indent:-16.7pt'><span style='line-height:104%'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span>P.
+Lunsford, J. Pickard, J. James, J. Linn, &quot;Strengthening the Pipeline from
+Highschool to Community </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:10.95pt;
+margin-left:-.25pt'>College to University in Rural Underserved Communities
+Through a Collaborative Videconferencing </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:18.85pt;
+margin-left:-.25pt'>Infrastructure&quot;, Submitted to 2020 ASEE Annual
+Conference </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:8.2pt;
+margin-left:16.7pt;text-indent:-16.7pt;line-height:200%'><span
+style='line-height:200%'>4.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Cisco WebEx Board, <a
+href="https://www.cisco.com/c/en/us/products/collaboration-endpoints/webex-board/index.html"><span
+style='color:#0563C1'>https://www.cisco.com/c/en/us/products/collaboration</span></a><a
+href="https://www.cisco.com/c/en/us/products/collaboration-endpoints/webex-board/index.html"><span
+style='color:#0563C1'>-</span></a><a
+href="https://www.cisco.com/c/en/us/products/collaboration-endpoints/webex-board/index.html"><span
+style='color:#0563C1'>endpoints/webex</span></a><a
+href="https://www.cisco.com/c/en/us/products/collaboration-endpoints/webex-board/index.html"></a><a
+href="https://www.cisco.com/c/en/us/products/collaboration-endpoints/webex-board/index.html"><span
+style='color:#0563C1'>board/index.html</span></a><a
+href="https://www.cisco.com/c/en/us/products/collaboration-endpoints/webex-board/index.html"><span
+style='color:#0563C1;text-decoration:none'> </span></a></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:18.8pt;
+margin-left:16.7pt;text-indent:-16.7pt'><span style='line-height:104%'>5.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span>Cisco
+WebEx conferencing service, https://www.webex.com </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:11.05pt;
+margin-left:16.7pt;text-indent:-16.7pt'><span style='line-height:104%'>6.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span>C.
+Popoviciu, P. Lunsford, J. Pickard, C. Sawyer, S. Wear, S. Lee, D. Drummond,
+&quot; Deploying Edge </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:18.8pt;
+margin-left:-.25pt'>Computing to Augment Endpoint Functionality&quot;,
+Submitted to 2020 ASEE Annual Conference </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:16.7pt;text-indent:-16.7pt;line-height:200%'><span
+style='line-height:200%'>7.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>G. Aceto, A. Botta, W. de Donato, A. Pescape, &quot;Cloud
+Monitoring: A Survey&quot;, Elsevier, vol 57, issue 9, p. 2093-2115 (2013) </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:16.7pt;text-indent:-16.7pt;line-height:200%'><span
+style='line-height:200%'>8.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>J. Edwards, &quot;Data Silos: Now and Forever?&quot;
+https://www.informationweek.com/strategic-cio/itstrategy/data-silos-now-and-forever/a/d-id/1333246
+</p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.35pt;
+margin-left:16.7pt;text-indent:-16.7pt'><span style='line-height:104%'>9.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span>L.Skorin-Karpov,
+M. Varela, T.<span style='background:#F0F0F0'> Hoßfeld</span>, K. Chen, &quot;A
+Survey of Emerging Concepts and Challenges for </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:0in;
+margin-left:-.25pt;margin-bottom:.0001pt'>QoE Management of Multimedia
+Services&quot;, ACM Transactions on Multimedia Computing, Communications and
+Applications (TOMM), Article 29, May 2018 </p>
+
+<p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:5.95pt;
+margin-left:16.7pt;text-indent:-16.7pt;line-height:normal;background:#FCFCFC'>10.<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span>L. Wang, X. V. Wang, &quot;<span
+style='color:#333333'>Latest Advancement in Cloud Technologies</span>&quot;,
+ISBN:<span style='color:#333333'> 978-3-319-67692-0, Springer (2017)</span><b> </b></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:16.7pt;text-indent:-16.7pt;line-height:200%'><span
+style='line-height:200%'>11.<span style='font:7.0pt "Times New Roman"'>&nbsp; </span></span>L.
+Cottrell, &quot;Tutorial on Internet Monitoring &amp; PingER at SLAC, <a
+href="https://www.slac.stanford.edu/comp/net/wan-mon/tutorial.html#intro"><span
+style='color:#0563C1'>https://www.slac.stanford.edu/comp/net/wan</span></a><a
+href="https://www.slac.stanford.edu/comp/net/wan-mon/tutorial.html#intro"><span
+style='color:#0563C1'>-</span></a><a
+href="https://www.slac.stanford.edu/comp/net/wan-mon/tutorial.html#intro"><span
+style='color:#0563C1'>mon/tutorial.html#intro</span></a><a
+href="https://www.slac.stanford.edu/comp/net/wan-mon/tutorial.html#intro"><span
+style='color:black;text-decoration:none'> </span></a> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:10.95pt;
+margin-left:16.7pt;text-indent:-16.7pt'><span style='line-height:104%'>12.<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span>The macroscopic
+behavior of the TCP congestion avoidance algorithm by Mathis, Semke, Mahdavi
+&amp; </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:-.25pt'>Ott&quot; in Computer Communication Review, 27(3), July
+1997 </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:18.5pt;
+margin-left:16.7pt;text-indent:-16.7pt;line-height:107%'><span
+style='line-height:107%'>13.<span style='font:7.0pt "Times New Roman"'>&nbsp; </span></span>APDEX
+Alliance <a href="https://www.apdex.org/overview.html"><span style='color:#0563C1'>https://www.apdex.org/overview.html</span></a><a
+href="https://www.apdex.org/overview.html"><span style='color:black;text-decoration:
+none'> </span></a></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:16.7pt;text-indent:-16.7pt;line-height:200%'><span
+style='line-height:200%'>14.<span style='font:7.0pt "Times New Roman"'>&nbsp; </span></span>E.
+Nemer, &quot;Handling VoIP Speech Coding Challenges: Part 1&quot;, 
+https://www.eetimes.com/document.asp?doc_id=1271981 </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:16.7pt;text-indent:-16.7pt;line-height:200%'><span
+style='line-height:200%'>15.<span style='font:7.0pt "Times New Roman"'>&nbsp; </span></span>&quot;Video
+Quality of Service&quot;,
+https://www.cisco.com/c/en/us/support/docs/quality-of-service-qos/qosvideo/212134-Video-Quality-of-Service-QOS-Tutorial.html#anc10
+</p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:10.9pt;
+margin-left:16.7pt;text-indent:-16.7pt'><span style='line-height:104%'>16.<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span>T. Avanesov, G.
+Gheorghe, M. Palattella, M. Kantor, C. Popoviciu, T. Engel, &quot;Network </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:10.95pt;
+margin-left:-.25pt'>Troubleshooting with SDN Radar&quot;, IFIP/IEEE
+International Symposium on Integrated Network </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:18.85pt;
+margin-left:-.25pt'>Management, 2015 </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:.05pt;
+margin-left:16.7pt;text-indent:-16.7pt;line-height:199%'><span
+style='line-height:199%'>17.<span style='font:7.0pt "Times New Roman"'>&nbsp; </span></span>G.
+Gheorghe, T. Avanesov, M. Palattella, T. Engel, C. Popoviciu, &quot;SDN-Radar:
+Network troubleshooting combining udser experience and SDN capabilities&quot;,
+Proceedings of the 2015 IEEE </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:18.85pt;
+margin-left:-.25pt'>Conference on Network Softwarization (NetSoft, 2015 </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:8.2pt;
+margin-left:16.7pt;text-indent:-16.7pt;line-height:200%'><span
+style='line-height:200%'>18.<span style='font:7.0pt "Times New Roman"'>&nbsp; </span></span>Raspberry
+PI 4 performance throttling due to high CPU temperatures, <a
+href="https://www.cnx-software.com/2019/06/24/raspberry-pi-4-benchmarks-mini-review/"><span
+style='color:#0563C1'>https://www.cnx</span></a><a
+href="https://www.cnx-software.com/2019/06/24/raspberry-pi-4-benchmarks-mini-review/"></a><a
+href="https://www.cnx-software.com/2019/06/24/raspberry-pi-4-benchmarks-mini-review/"><span
+style='color:#0563C1'>software.com/2019/06/24/raspberry</span></a><a
+href="https://www.cnx-software.com/2019/06/24/raspberry-pi-4-benchmarks-mini-review/"><span
+style='color:#0563C1'>-</span></a><a
+href="https://www.cnx-software.com/2019/06/24/raspberry-pi-4-benchmarks-mini-review/"><span
+style='color:#0563C1'>pi</span></a><a
+href="https://www.cnx-software.com/2019/06/24/raspberry-pi-4-benchmarks-mini-review/"><span
+style='color:#0563C1'>-</span></a><a
+href="https://www.cnx-software.com/2019/06/24/raspberry-pi-4-benchmarks-mini-review/"><span
+style='color:#0563C1'>4</span></a><a
+href="https://www.cnx-software.com/2019/06/24/raspberry-pi-4-benchmarks-mini-review/"><span
+style='color:#0563C1'>-</span></a><a
+href="https://www.cnx-software.com/2019/06/24/raspberry-pi-4-benchmarks-mini-review/"><span
+style='color:#0563C1'>benchmarks</span></a><a
+href="https://www.cnx-software.com/2019/06/24/raspberry-pi-4-benchmarks-mini-review/"><span
+style='color:#0563C1'>-</span></a><a
+href="https://www.cnx-software.com/2019/06/24/raspberry-pi-4-benchmarks-mini-review/"><span
+style='color:#0563C1'>mini</span></a><a
+href="https://www.cnx-software.com/2019/06/24/raspberry-pi-4-benchmarks-mini-review/"><span
+style='color:#0563C1'>-</span></a><a
+href="https://www.cnx-software.com/2019/06/24/raspberry-pi-4-benchmarks-mini-review/"><span
+style='color:#0563C1'>review/</span></a><a
+href="https://www.cnx-software.com/2019/06/24/raspberry-pi-4-benchmarks-mini-review/"><span
+style='color:black;text-decoration:none'> </span></a></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:11.2pt;
+margin-left:16.7pt;text-indent:-16.7pt'><span style='line-height:104%'>19.<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span>“Phoronix Test Suite
+- Linux Testing &amp; Benchmarking Platform, Automated Testing, Open-Source </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:10.7pt;
+margin-left:0in;text-indent:0in;line-height:107%'>Benchmarking.” <i>Phoronix
+Test Suite - Linux Testing &amp; Benchmarking Platform, Automated Testing,
+Open-</i></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:18.85pt;
+margin-left:-.25pt'><i>Source Benchmarking</i>, www.phoronix-test-suite.com/ </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:2.3pt;margin-bottom:7.35pt;
+margin-left:16.7pt;text-indent:-16.7pt;line-height:200%'><span
+style='line-height:200%'>20.<span style='font:7.0pt "Times New Roman"'>&nbsp; </span></span>S.
+Lee, K. Levanti, H.S. Kim“Network monitoring: Present and future.”, Elsevier,
+Computer Networks, Vol 65, June 2014, pg. 84-98 </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:18.5pt;
+margin-left:0in;text-indent:0in;line-height:107%'> </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:7.95pt;
+margin-left:0in;text-indent:0in;line-height:107%'>  </p>
+
+<p class=MsoNormal style='margin:0in;margin-bottom:.0001pt;text-indent:0in;
+line-height:107%'> </p>
+
+</div>
+
+</body>
+
+</html>
