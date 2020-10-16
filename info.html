@@ -9,13 +9,10 @@
 	</head>
     <body>
         <div id = "results"></div>
-        <a href="/">Back to Login</a>
-        <script>
-            const resultsList = document.getElementById('results')
-            new URLSearchParams(window.location.search).forEach((value,name) => {
-                resultsList.append(`${name}: ${value}`)
-                resultsList.append(document.createElement('br'))
-            })
-        </script>
+        <p>WELCOME TO THE INTRANET</p>
+        <a href="login.html">Back to Login</a>
+
+        <script src="assets/js/login.js"></script>
+
     </body>
 </html>
