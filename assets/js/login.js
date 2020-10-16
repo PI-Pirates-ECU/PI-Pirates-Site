@@ -1,11 +1,11 @@
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       // User is signed in.
-      document. getElementById("results").style.display = "intial";
+      document. getElementById("results.html").style.display = "initial";
 
     } else {
       // No user is signed in.
-      document. getElementById("form").style.display = "none";
+      document. getElementById("form_div").style.display = "initial";
     }
   });
   
