@@ -1,14 +1,15 @@
 firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      // User is signed in.
-      window.alert("Signed In")
-      document.getElementById('dash').src = "loggedin.html"
-    } else {
-      // No user is signed in.
-      window.alert("Signed Out")
-      document.getElementById('login').src = "login.html"
-    }
-  });  
+  if (user) {
+    // User is signed in.
+    window.alert("Signed In: " + userEmail)
+    window.location.href = "loggedin.html"
+  } else {
+    // No user is signed in.
+    //window.alert("Signed Out")
+    window.location.href = "login.html"
+  }
+  
+}); 
 
 
 function login(){
