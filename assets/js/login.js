@@ -42,7 +42,6 @@ $("#login-button").click(function(){
       //window.alert(userEmail + " " + userPassword)
       var errorCode = error.code;
       var errorMessage = error.message;
-      
       // ...
       if (errorCode === 'auth/wrong-password') {
         alert('Wrong password.');
@@ -56,7 +55,7 @@ $("#login-button").click(function(){
 });
 
 $("#logout-button").click(function(){
-  window.alert("Clicked");
+  alert("Clicked");
   firebase.auth().signOut().then(function() {
     // Sign-out successful.
     //window.alert("Signed Out")
@@ -77,3 +76,4 @@ window.onload = firebase.auth().onAuthStateChanged(function(user){
     window.location.herf = "login.html"
   }
 });
+
