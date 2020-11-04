@@ -55,11 +55,10 @@ $("#login-button").click(function(){
 });
 
 $("#logout-button").click(function(){
-  alert("Clicked");
+  //alert("Clicked");
   firebase.auth().signOut().then(function() {
     // Sign-out successful.
     //window.alert("Signed Out")
-    //window.location.href = "login.html";
   }).catch(function(error) {
     // An error happened.
     var errorCode = error.code;
@@ -68,12 +67,12 @@ $("#logout-button").click(function(){
   });
 });
 
-window.onload = firebase.auth().onAuthStateChanged(function(user){
-  if(user){
-    //alert('working')
-     window.location.href = "loggedin.html"
-  } else {
-    window.location.herf = "login.html"
-  }
-});
-
+/*
+ window.onload = firebase.auth().onAuthStateChanged(function(user){
+    if(user){
+       window.location.href = "loggedin.html"
+    } else {
+      window.location.herf = "login.html"
+    }
+  });
+*/
