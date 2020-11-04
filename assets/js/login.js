@@ -13,35 +13,65 @@
      // Initialize Firebase
        firebase.initializeApp(firebaseConfig);
        firebase.analytics();
+       firebase.auth();
+       /*firebase.performance();
+       firebase.remoteConfig();*/
+       
 
-firebase.auth.Auth.Persistence.SESSION;
 
 $("#login-button").click(function(){
   var userEmail = document.getElementById("email").value;
   var userPassword = document.getElementById("password").value;
-  //window.alert(userEmail + " " + userPassword)
-  firebase.auth().signInWithEmailAndPassword(userEmail, userPassword).catch(function(error) {
+  //var human = documet.getElementById("human").value;
+
+  if(userEmail.length < 4) {
+    alert('Please enter an email address.');
+    return;
+  }
+  if(userPassword.length < 4) {
+    alert('Please enter a password.');
+    return;
+  }
+  /*if(!human){
+    alert('Please Verify that you are not a Robot');
+    return;
+  }*/
+  firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(function() {
+    return firebase.auth().signInWithEmailAndPassword(userEmail, userPassword).catch(function(error) {
       // Handle Errors here.
       //window.alert(userEmail + " " + userPassword)
       var errorCode = error.code;
       var errorMessage = error.message;
+      
       // ...
-      window.alert("Error: " + errormessage);
+      if (errorCode === 'auth/wrong-password') {
+        alert('Wrong password.');
+      } else {
+        alert(errorMessage);
+      }
+      console.log(error);
     });
-
+  })
+ 
 });
 
-/*
-function login(){
-  var userEmail = document.getElementById("email").value
-  var userPassword = document.getElementById("password").value
+$("#logout-button").click(function(){
+  window.alert("Working");
+  firebase.auth().signOut().then(function() {
+    // Sign-out successful.
+    //window.alert("Signed Out")
+    window.location.href = "login.html";
+  }).catch(function(error) {
+    // An error happened.
+  });
+  
+})
 
-  firebase.auth().signInWithEmailAndPassword(userEmail, userPassword).catch(function(error) {
-      // Handle Errors here.
-      window.alert(userEmail + " " + userPassword)
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // ...
-      window.alert("Error: " + errormessage)
-    });
-}*/
+window.onload = firebase.auth().onAuthStateChanged(function(user){
+  if(user){
+    //alert('working')
+     window.location.href = "loggedin.html"
+  } else {
+    window.location.herf = "login.html"
+  }
+});
