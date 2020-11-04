@@ -56,16 +56,18 @@ $("#login-button").click(function(){
 });
 
 $("#logout-button").click(function(){
-  window.alert("Working");
+  window.alert("Clicked");
   firebase.auth().signOut().then(function() {
     // Sign-out successful.
     //window.alert("Signed Out")
-    window.location.href = "login.html";
+    //window.location.href = "login.html";
   }).catch(function(error) {
     // An error happened.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    alert(errorMessage);
   });
-  
-})
+});
 
 window.onload = firebase.auth().onAuthStateChanged(function(user){
   if(user){

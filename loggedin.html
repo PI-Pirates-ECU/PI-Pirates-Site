@@ -20,7 +20,7 @@
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
-			<div id="dash" class="divided">
+			<div id="wrapper" class="divided">
                 <section class="banner style2 orient-center content-align-center image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
                     <div class="content align-center">
 			<!-- Form -->
@@ -59,8 +59,16 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
-			<script src= "assets/js/login.js"></script>
+			<script src="assets/js/login.js"></script>
 
+			<script> window.onload = firebase.auth().onAuthStateChanged(function(user){
+				if(user){
+				  //alert('working')
+				   window.location.href = "loggedin.html"
+				} else {
+				  window.location.herf = "login.html"
+				}
+			  });</script>
 	  </script> 
 		<!-- Note: Only needed for demo purposes. Delete for production sites. -->
 			<script src="assets/js/demo.js"></script>

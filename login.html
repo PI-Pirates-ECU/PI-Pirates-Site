@@ -37,7 +37,7 @@
                                             <label for="password">Password</label>
 						                </div>
 									    <div class="field half align-left">
-									        <input type="checkbox" id="human" name="human" required/>
+									        <input type="checkbox" id="human" name="human" value = "" required/>
                                             <label for="human">Not a Robot</label>
                                             <p></p>
 									    </div>
@@ -77,7 +77,14 @@
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
 			<script src="assets/js/login.js"></script>
-			
+			<script> window.onload = firebase.auth().onAuthStateChanged(function(user){
+				if(user){
+				  //alert('working')
+				   window.location.href = "loggedin.html"
+				} else {
+				  window.location.herf = "login.html"
+				}
+			  });</script>
 		<!-- Note: Only needed for demo purposes. Delete for production sites. -->
 			<script src="assets/js/demo.js"></script>
 			
