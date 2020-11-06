@@ -58,7 +58,7 @@ $("#logout-button").click(function(){
   //window.alert("Clicked");
   firebase.auth().signOut().then(function() {
     // Sign-out successful.
-    //window.alert("Signed Out")
+    window.location.href = "login.html";
   }).catch(function(error) {
     // An error happened.
     var errorCode = error.code;
