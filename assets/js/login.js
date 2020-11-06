@@ -55,7 +55,7 @@ $("#login-button").click(function(){
 });
 
 $("#logout-button").click(function(){
-  //alert("Clicked");
+  //window.alert("Clicked");
   firebase.auth().signOut().then(function() {
     // Sign-out successful.
     //window.alert("Signed Out")
@@ -66,6 +66,27 @@ $("#logout-button").click(function(){
     alert(errorMessage);
   });
 });
+
+
+$("#change-password-button").click(function(){
+  var auth = firebase.auth();
+  var user = firebase.auth().currentUser;
+  var emailAddress = "error@test.com";
+
+  if (user != null) {
+    user.providerData.forEach(function (profile) {
+      emailAddress = profile.email;
+      console.log("  Email: " + emailAddress);
+    });
+  }
+  auth.sendPasswordResetEmail(emailAddress).then(function() {
+    // Email sent.
+    window.alert("EMAIL SENT TO RESET PASSWORD");
+  }).catch(function(error) {
+    // An error happened.
+  });
+});
+
 
 /*
  window.onload = firebase.auth().onAuthStateChanged(function(user){
