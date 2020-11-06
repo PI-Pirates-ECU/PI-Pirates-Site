@@ -84,9 +84,30 @@ $("#change-password-button").click(function(){
     window.alert("EMAIL SENT TO RESET PASSWORD");
   }).catch(function(error) {
     // An error happened.
+    var errorMessage = error.message;
+    alert(errorMessage);
   });
 });
 
+$("#forgot-password-button").click(function(){
+  var auth = firebase.auth();
+  var emailAddress = document.getElementById("email").value;
+
+  if (emailAddress != "") {
+    auth.sendPasswordResetEmail(emailAddress).then(function() {
+      // Email sent.
+      window.alert("EMAIL SENT TO RESET PASSWORD");
+    }).catch(function(error) {
+      // An error happened.
+      var errorMessage = error.message;
+      alert(errorMessage);
+    });
+
+  } else{
+    window.alert("Please enter an Email")
+  }
+  
+});
 
 /*
  window.onload = firebase.auth().onAuthStateChanged(function(user){
