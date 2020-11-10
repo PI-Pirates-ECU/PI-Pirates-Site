@@ -65,11 +65,9 @@
 			<script src="assets/js/login.js"></script>
 
 			<script>
-				window.onload = firebase.auth().onAuthStateChanged(function(user){
-  					if(user){
-     					window.location.href = "loggedin.html"
-  					} else {
-    					window.location.herf = "login.html"
+				firebase.auth().onAuthStateChanged(function(user){
+  					if(!user){
+     					window.location.href = "login.html"
   					}
 				});
 			</script>
