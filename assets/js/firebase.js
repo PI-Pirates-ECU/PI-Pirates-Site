@@ -108,9 +108,7 @@ $("#forgot-password-button").click(function(){
   
 });
 
-//File Storage NOT WORKING YET
-//var storage = firebase.storage();
-
+//File Storage
 const storage = firebase.storage();
 var file;
 var fileName;
@@ -118,7 +116,6 @@ var storageRef = storage.ref().child;
 var userFileLabel = document.getElementById("user-file-label");
 
 $("#file-select").change(function(e){
-    window.alert("SELECT FILE CHANGED");
     //Get File after change
     file = e.target.files[0];
     fileName = file.name;
@@ -130,7 +127,6 @@ $("#file-select").change(function(e){
 });
 
 $("#file-submit").click(function(e){   
-    window.alert("SELECT FILE SUBMITTED");
     //Upload File
     var uploadTask = storageRef.put(file);
     // Register three observers:
@@ -160,4 +156,21 @@ $("#file-submit").click(function(e){
         console.log('File available at', downloadURL);
       });
     });
+});
+
+
+//Retrieving List
+// Create a reference under which you want to list
+// Find all the prefixes and items.
+window.onload = storageRef.listAll().then(function(res) {
+  res.prefixes.forEach(function(folderRef) {
+    // All the prefixes under listRef.
+    console.log(folderRef.name);
+    // You may call listAll() recursively on them.
+  });
+  res.items.forEach(function(itemRef) {
+    // All the items under listRef.
+  });
+}).catch(function(error) {
+  // Uh-oh, an error occurred!
 });
