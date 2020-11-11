@@ -14,8 +14,7 @@
        firebase.initializeApp(firebaseConfig);
        firebase.analytics();
        firebase.auth();
-       /*firebase.performance();
-       firebase.remoteConfig();*/
+      
        
 
 
@@ -109,12 +108,56 @@ $("#forgot-password-button").click(function(){
   
 });
 
-/*
- window.onload = firebase.auth().onAuthStateChanged(function(user){
-    if(user){
-       window.location.href = "loggedin.html"
-    } else {
-      window.location.herf = "login.html"
-    }
-  });
-*/
+//File Storage NOT WORKING YET
+//var storage = firebase.storage();
+
+const storage = firebase.storage();
+var file;
+var fileName;
+var storageRef = storage.ref().child;
+var userFileLabel = document.getElementById("user-file-label");
+
+$("#file-select").change(function(e){
+    window.alert("SELECT FILE CHANGED");
+    //Get File after change
+    file = e.target.files[0];
+    fileName = file.name;
+    console.log("FILE: " + fileName); 
+    //Display File Name
+    userFileLabel.textContent = "Selected: " + fileName;
+    //Create Storage Ref
+    storageRef = firebase.storage().ref('main/' + file.name);
+});
+
+$("#file-submit").click(function(e){   
+    window.alert("SELECT FILE SUBMITTED");
+    //Upload File
+    var uploadTask = storageRef.put(file);
+    // Register three observers:
+    // 1. 'state_changed' observer, called any time the state changes
+    // 2. Error observer, called on failure
+    // 3. Completion observer, called on successful completion
+    uploadTask.on('state_changed', function(snapshot){
+      // Observe state change events such as progress, pause, and resume
+      // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+      var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log('Upload is ' + progress + '% done');
+      switch (snapshot.state) {
+        case firebase.storage.TaskState.PAUSED: // or 'paused'
+          console.log('Upload is paused');
+          break;
+        case firebase.storage.TaskState.RUNNING: // or 'running'
+          console.log('Upload is running');
+          break;
+      }
+    }, function(error) {
+      // Handle unsuccessful uploads
+    }, function() {
+      // Handle successful uploads on complete
+      userFileLabel.textContent = fileName + ": upload complete";
+      // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+      uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+        console.log('File available at', downloadURL);
+      });
+    });
+});

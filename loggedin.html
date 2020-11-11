@@ -15,31 +15,40 @@
 		<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
 
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
 			<div id="wrapper" class="divided">
                 <section class="banner style2 orient-center content-align-center image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
-                    <div class="content align-center">
-			<!-- Form -->
-								
-								<h2>Welcome to the Pi Pirates Intranet</h2>
-								<p> We are currently working to get more content added!</p>
-								<div class="actions align-center">
-									<a id="logout-button" class="button small wide smooth-scroll-middle">Logout</a>
-									<a id="change-password-button" class="button small wide smooth-scroll-middle">Change Password</a>
-								</div>
-								<div class="align-center">
-									<a id = "fun-button" href = "fun.html" class="button small wide smooth-scroll-middle">Have a little fun</a>
-								</div>
-
+					<div class="content align-center">
+						<h2>Welcome to the Pi Pirates Intranet</h2>
+						<p> We are currently working to get more content added!</p>
+						<div class="actions align-center">
+							<a id="logout-button" class="button small wide smooth-scroll-middle">Logout</a>
+							<a id="change-password-button" class="button small wide smooth-scroll-middle">Change Password</a>
+						</div>
+						<div class="align-center">
+							<a id = "fun-button" href = "fun.html" class="button small wide smooth-scroll-middle">Have a little fun</a>
+						</div>
+						<div class="content align-center">
+							<h2>Documents</h2>
+							<div class="actions align-center">
+								<ul class = "actions stacked">
+									<li><input type="file" class="file-select" name= "" id ="file-select" hidden/></li>
+									<li><label for="file-select" class = "button small wide smooth-scroll-middle" id ="file-select">Select file</label></li>
+									<p id="user-file-label">No file selected</p>
+									<a id="file-submit" class="button small wide smooth-scroll-middle">Submit</a>
+								</ul>
+							</div>
+						</div>
                     </div>
                     <div class="image">
                         <img src="images/connection.jpg" alt="" />
                     </div>
                 </section>
-            </div>
+			</div>
 				<!-- Footer -->
                 <footer class="wrapper style1 align-center">
                     <div class="inner">
@@ -62,7 +71,7 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
-			<script src="assets/js/login.js"></script>
+			<script src="assets/js/firebase.js"></script>
 
 			<script>
 				firebase.auth().onAuthStateChanged(function(user){
