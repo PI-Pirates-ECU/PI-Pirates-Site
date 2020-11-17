@@ -15,9 +15,13 @@
        firebase.analytics();
        firebase.auth();
       
-       
-
-
+// =======================================================================
+//                     Login Button (onClick)
+// =======================================================================
+//  function takes text from email and password field and relay info
+//    to firebase for authentication. Firebase returns user object once
+//    authenticated or alerts user to error
+// =======================================================================
 $("#login-button").click(function(){
   var userEmail = document.getElementById("email").value;
   var userPassword = document.getElementById("password").value;
@@ -53,6 +57,12 @@ $("#login-button").click(function(){
  
 });
 
+// =======================================================================
+//                     Logout Button (onClick)
+// =======================================================================
+//  function calls proper firebase logout API functions. Alerts user
+//    of any errors and redirects to login page.
+// =======================================================================
 $("#logout-button").click(function(){
   //window.alert("Clicked");
   firebase.auth().signOut().then(function() {
@@ -66,7 +76,12 @@ $("#logout-button").click(function(){
   });
 });
 
-
+// =======================================================================
+//                     Change Password Button Button (onClick)
+// =======================================================================
+//  function uses Firebase API to send e-mailto reset password for 
+//    authentication. 
+// =======================================================================
 $("#change-password-button").click(function(){
   var auth = firebase.auth();
   var user = firebase.auth().currentUser;
@@ -88,6 +103,12 @@ $("#change-password-button").click(function(){
   });
 });
 
+// =======================================================================
+//                     Forgot Password Button Button (onClick)
+// =======================================================================
+//  function uses Firebase API to send email based on text in email
+//    field. 
+// =======================================================================
 $("#forgot-password-button").click(function(){
   var auth = firebase.auth();
   var emailAddress = document.getElementById("email").value;
