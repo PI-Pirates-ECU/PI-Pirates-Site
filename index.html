@@ -12,8 +12,18 @@
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
+	<style>
+		#btnScrollToTop {
+			position: fixed;
+			right: 10px;
+			bottom: 10px;
+			outline: none;
+			cursor: pointer;
+			z-index: 3;
+		}
+	</style>
 	<body class="is-preload">
-
+		<a id = "btnScrollToTop" class="button primary large icon solid fa-arrow-up smooth-scroll">Back to top</a>
 		<!-- Wrapper -->
 			<div id="wrapper" class="divided">
 				<!-- Title -->
@@ -594,6 +604,17 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+
+			<script>
+				const btnScrollToTop = document.querySelector("#btnScrollToTop");
+				btnScrollToTop.addEventListener("click", function(){
+					window.scrollTo({
+						top: 40,
+						left: 0,
+						behavior: "smooth"
+					});
+				});
+			</script>
 
 	</body>
 </html>
