@@ -15,21 +15,21 @@
 	<style>
 		#btnScrollToTop {
 			position: fixed;
-			right: 10px;
-			bottom: 10px;
+			right: 25px;
+			bottom: 25px;
 			outline: none;
 			cursor: pointer;
 			z-index: 3;
+			visibility: hidden;
 		}
 	</style>
 	<body class="is-preload">
-		<a id = "btnScrollToTop" class="button primary large icon solid fa-arrow-up smooth-scroll">Back to top</a>
+		<a id = "btnScrollToTop" href = "#wrapper" class="button primary large icon solid fa-arrow-up smooth-scroll">Back to top</a>
 		<!-- Wrapper -->
 			<div id="wrapper" class="divided">
 				<!-- Title -->
-					<section class="banner style2 orient-left content-align-right image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
-						
-						<div class="content">
+					<section class="banner style2 orient-left content-align-right image-position-right fullscreen onload-image-fade-in onload-content-fade-right">s	
+						<div id = "top" class="content">
 							<h1>Pi-Pirates</h1>
 							<p class="major">Sponsored Research Group from <a href="https://cet.ecu.edu/">East Carolina University</a></a></p>
 							<ul class="actions align-right">
@@ -611,8 +611,16 @@
 			<script src="assets/js/main.js"></script>
 
 			<script>
-				const btnScrollToTop = document.querySelector("#btnScrollToTop");
+				//Script to Control Back to Top Button
+				var btnScrollToTop = document.querySelector("#btnScrollToTop");
+				var wrapperDiv = document.querySelector("#wrapper");
+				//On Scroll the Button should appear
+				window.addEventListener("scroll", function(){
+					btnScrollToTop.style.visibility = "visible";
+				});
+				//On Click the Button should disappear and smooth scroll to top
 				btnScrollToTop.addEventListener("click", function(){
+					btnScrollToTop.style.visibility = "hidden";
 					window.scrollTo({
 						top: 40,
 						left: 0,
@@ -620,6 +628,5 @@
 					});
 				});
 			</script>
-
 	</body>
 </html>
