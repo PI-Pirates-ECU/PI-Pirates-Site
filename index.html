@@ -12,19 +12,8 @@
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
-	<style>
-		#btnScrollToTop {
-			position: fixed;
-			right: 25px;
-			bottom: 25px;
-			outline: none;
-			cursor: pointer;
-			z-index: 3;
-			visibility: hidden;
-		}
-	</style>
 	<body class="is-preload">
-		<a id = "btnScrollToTop" href = "#wrapper" class="button primary large icon solid fa-arrow-up smooth-scroll">Back to top</a>
+		<a id = "btnScrollToTop" href = "#wrapper" class="button primary large icon solid fa-arrow-up smooth-scroll btnScrollToTop">Back to top</a>
 		<!-- Wrapper -->
 			<div id="wrapper" class="divided">
 				<!-- Title -->
@@ -45,10 +34,13 @@
 				<!-- Navigation Menu-->
 					<section class="wrapper style1 align-center">
 						<div class="inner">
+							
 							<h2>We concentrate our efforts on revolutionizing the connected world through the development of technologies and designs for wired/wireless infrastructures, IoT and AI driven automation.</h2>
-							<a href="#" class= "button primary disabled"> NEWS: Look out here for updates on our newest work</a>
+							<div id="news">
+								<a id="btnNews" class= "button primary">NEWS: Congratulations Harrison! Click to see more</a>
+							</div>
 							<div id="menu"></div>
-							<div class="items style1 small onload-fade-in">
+							<div id = "nav" class="items style1 small onload-fade-in">
 								<section>
 									<a href="#projects" class="button primary large icon solid fa-network-wired smooth-scroll"> Projects</a>
 									<p></p>
@@ -427,7 +419,18 @@
 									</ul>
 								</div>
 							</article>
-
+							<article>
+								<a href="images/gallery/fulls/Harrison_FirstPlace.jpg" class="image">
+									<img src="images/gallery/thumbs/Harrison_FirstPlace.jpg" alt="" />
+								</a>
+								<div class="caption">
+									<h3>Congratulations Harrison!</h3>
+									<p>Harrison Thaxton takes first place at Palo Alto: Secure the Future competition</p>
+									<ul class="actions fixed">
+										<li><span class="button small">Expand</span></li>
+									</ul>
+								</div>
+							</article>
 							<!-- Gallery for Future Expansion
 							<article>
 								<a href="images/gallery/fulls/04.jpg" class="image">
@@ -621,6 +624,7 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script src="assets/js/news.js"></script>
 
 			<script>
 				//Script to Control Back to Top Button
