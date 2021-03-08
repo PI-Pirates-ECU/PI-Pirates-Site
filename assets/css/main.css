@@ -8632,3 +8632,13 @@ input, select, textarea {
 			#wrapper.divided > .invert:first-child {
 				box-shadow: none !important;
 			}
+
+#btnScrollToTop {
+	position: fixed;
+	right: 25px;
+	bottom: 20px;
+	outline: none;
+	cursor: pointer;
+	z-index: 3;
+	visibility: hidden;
+}
